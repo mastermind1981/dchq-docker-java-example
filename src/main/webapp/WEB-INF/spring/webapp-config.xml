@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <mvc:annotation-driven />
+
+    <mvc:resources mapping="/resources/**" location="/resources/" />
+
+    <context:component-scan base-package="dchq.dbconnect" />
+
+    <context:property-placeholder />
+
+    <bean id="dataSource" class="snaq.db.DBPoolDataSource" destroy-method="release">
+        <property name="driverClassName" value="${database_driverClassName}"/>
+        <property name="url" value="${database_url}"/>
+        <property name="user" value="${database_username}"/>
+        <property name="password" value="${database_password}"/>
+        <property name="minPool" value="1"/>
+        <property name="maxPool" value="10"/>
+        <property name="maxSize" value="10"/>
+        <property name="idleTimeout" value="60"/>
+    </bean>
+
+    <bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase">
+        <property name="dataSource" ref="dataSource" />
+        <property name="changeLog" value="/WEB-INF/upgrade/upgrade.sql" />
+    </bean>
+
+    <bean id="nameDirectoryServiceFactory" class="dchq.dbconnect.service.NameDirectoryServiceFactory" factory-method="createFactory">
+        <property name="driverClassName" value="${database_driverClassName}"/>
+    </bean>
+
+    <bean id="nameDirectoryService" factory-bean="nameDirectoryServiceFactory" factory-method="createService"/>
+
+    <bean id="velocityConfig" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+        <property name="resourceLoaderPath" value="/WEB-INF/html/"/>
+    </bean>
+
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.velocity.VelocityViewResolver">
+        <property name="cache" value="true"/>
+        <property name="prefix" value=""/>
+        <property name="suffix" value=".html"/>
+        <property name="exposeSpringMacroHelpers" value="true"/>
+    </bean>
+
+</beans>
