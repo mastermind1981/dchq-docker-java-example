@@ -297,9 +297,9 @@ The **host** parameter allows you to specify the host you would like to use for 
 
 -   *host1, host2, host3*, etc. – selects a host randomly within a data-center (or cluster) for container deployments
 
--   *<IP Address 1, IP Address 2, etc.>* -- allows a user to specify the actual IP addresses to use for container deployments
+-   *IP Address 1, IP Address 2, etc.* -- allows a user to specify the actual IP addresses to use for container deployments
 
--   *<Hostname 1, Hostname 2, etc.>* -- allows a user to specify the actual hostnames to use for container deployments
+-   *Hostname 1, Hostname 2, etc.* -- allows a user to specify the actual hostnames to use for container deployments
 
 -   *Wildcards* (e.g. “db-*”, or “app-srv-*”) – to specify the wildcards to use within a hostname
 
@@ -309,15 +309,15 @@ Here is a list of supported environment variable values:
 
 -   **{{alphanumeric | 8}}** – creates a random 8-character alphanumeric string. This is most useful for creating random passwords.
 
--   **{{<Image Name> | ip}}** – allows you to enter the host IP address of a container as a value for an environment variable. This is most useful for allowing the middleware tier to establish a connection with the database.
+-   **{{Image Name | ip}}** – allows you to enter the host IP address of a container as a value for an environment variable. This is most useful for allowing the middleware tier to establish a connection with the database.
 
--   **{{<Image Name> | container_ip}}** – allows you to enter the name of a container as a value for an environment variable. This is most useful for allowing the middleware tier to establish a secure connection with the database (without exposing the database port).
+-   **{{Image Name | container_ip}}** – allows you to enter the name of a container as a value for an environment variable. This is most useful for allowing the middleware tier to establish a secure connection with the database (without exposing the database port).
 
--   **{{<Image Name> | container_private_ip}}** – allows you to enter the internal IP of a container as a value for an environment variable. This is most useful for allowing the middleware tier to establish a secure connection with the database (without exposing the database port).
+-   **{{Image Name | container_private_ip}}** – allows you to enter the internal IP of a container as a value for an environment variable. This is most useful for allowing the middleware tier to establish a secure connection with the database (without exposing the database port).
 
--   **{{<Image Name> | port _<Port Number>}}** – allows you to enter the Port number of a container as a value for an environment variable. This is most useful for allowing the middleware tier to establish a connection with the database. In this case, the port number specified needs to be the internal port number – i.e. not the external port that is allocated to the container. For example, {{PostgreSQL | port_5432}} will be translated to the actual external port that will allow the middleware tier to establish a connection with the database.
+-   **{{Image Name | port _<Port Number>}}** – allows you to enter the Port number of a container as a value for an environment variable. This is most useful for allowing the middleware tier to establish a connection with the database. In this case, the port number specified needs to be the internal port number – i.e. not the external port that is allocated to the container. For example, {{PostgreSQL | port_5432}} will be translated to the actual external port that will allow the middleware tier to establish a connection with the database.
 
--   **{{<Image Name> | <Environment Variable Name>}}** – allows you to enter the value an image’s environment variable into another image’s environment variable. The use cases here are endless – as most multi-tier applications will have cross-image dependencies.
+-   **{{Image Name | <Environment Variable Name>}}** – allows you to enter the value an image’s environment variable into another image’s environment variable. The use cases here are endless – as most multi-tier applications will have cross-image dependencies.
 
  
 
