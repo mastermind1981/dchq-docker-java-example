@@ -1,9 +1,9 @@
 **Table of Contents**  
 
-- [DCHQ - Docker Java Example ](#)
-- [A Step by Step Guide for Deploying & Managing a Java Application on Docker-based WebSphere, JBoss, Tomcat and Jetty Application Servers](#)
-	- [Background](#)
-	- [Configuring the web.xml and webapp-config.xml files in the Java application](#)
+- [DCHQ - Docker Java Example ](#DCHQ - Docker Java Example)
+- [A Step by Step Guide for Deploying & Managing a Java Application on Docker-based WebSphere, JBoss, Tomcat and Jetty Application Servers](#DCHQ - Docker Java Example)
+	- [Background](#Background)
+	- [Configuring the web.xml and webapp-config.xml files in the Java application](#Configuring the web.xml and webapp-config.xml files in the Java application)
 	- [Using the liquibase bean to initialize the connected database](#)
 	- [Building the YAML-based application templates that can re-used on any Linux host running anywhere](#)
 		- [3-Tier Java (Nginx – Tomcat – MySQL)](#)
