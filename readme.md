@@ -1,3 +1,36 @@
+**Table of Contents**  
+
+- [DCHQ - Docker Java Example ](#)
+- [A Step by Step Guide for Deploying & Managing a Java Application on Docker-based WebSphere, JBoss, Tomcat and Jetty Application Servers](#)
+	- [Background](#)
+	- [Configuring the web.xml and webapp-config.xml files in the Java application](#)
+	- [Using the liquibase bean to initialize the connected database](#)
+	- [Building the YAML-based application templates that can re-used on any Linux host running anywhere](#)
+		- [3-Tier Java (Nginx – Tomcat – MySQL)](#)
+		- [3-Tier Java (Nginx – Jetty – MySQL)](#)
+		- [3-Tier Java (Nginx – JBoss – MySQL)](#)
+		- [2-Tier Java (WebSphere – MySQL)](#)
+		- [3-Tier Java (Nginx – Tomcat – PostgreSQL)](#)
+		- [3-Tier Java (Nginx – Jetty – PostgreSQL)](#)
+		- [3-Tier Java (Nginx – JBoss – PostgreSQL)](#)
+		- [2-Tier Java (WebSphere – PostgreSQL)](#)
+		- [3-Tier Java (Nginx – Tomcat – Oracle-XE)](#)
+		- [3-Tier Java (Nginx – Jetty – Oracle-XE)](#)
+		- [3-Tier Java (Nginx – JBoss – Oracle-XE)](#)
+		- [2-Tier Java (WebSphere – Oracle-XE)](#)
+		- [Invoking a plug-in to initialize the database separately on a 3-Tier Java (Nginx – Tomcat – MySQL)](#)
+		- [Using your script or deployment plan](#)
+- [!/bin/bash](#)
+	- [Provisioning & Auto-Scaling the Underlying Infrastructure on Any Cloud](#)
+	- [Deploying the Multi-Tier Java Application on the Rackspace Cluster](#)
+	- [Accessing The In-Browser Terminal For The Running Containers](#)
+	- [Monitoring the CPU, Memory & I/O Utilization of the Running Containers](#)
+	- [Enabling the Continuous Delivery Workflow with Jenkins to Update the WAR File of the Running Application when a Build is Triggered](#)
+	- [Scaling out the Tomcat Application Server Cluster](#)
+	- [Conclusion](#)
+
+ 
+
 DCHQ - Docker Java Example 
 ===========================
 
