@@ -156,7 +156,7 @@ Using the liquibase bean to initialize the connected database
 
 We typically recommend initializing the database schema as part of the Java application deployment itself. This way, you don’t have to worry about maintaining separate SQL files that need to be executed on the database separately.
 
-However if you already have those SQL files and you still prefer executing them on the database separately – then DCHQ can help you automate this process through its plug-in framework. You can refer to this "<a href=##invoking-a-plug-in-to-initialize-the-database-separately-on-a-3-tier-java-nginx--tomcat--mysql>section</a>" for more information.
+However if you already have those SQL files and you still prefer executing them on the database separately – then DCHQ can help you automate this process through its plug-in framework. You can refer to this <a href=#invoking-a-plug-in-to-initialize-the-database-separately-on-a-3-tier-java-nginx--tomcat--mysql>section</a> for more information.
 
 In order to include the SQL scripts for creating the database tables in the Java application, you will need to configure **webapp-config.xml** file to use **liquibase** bean that checks the dataSource and runs new statements from upgrade.sql. Liquibase tracks which changelog statements have run against each database.
 
