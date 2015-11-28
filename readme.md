@@ -20,7 +20,6 @@
 		- [2-Tier Java (WebSphere – Oracle-XE)](#)
 		- [Invoking a plug-in to initialize the database separately on a 3-Tier Java (Nginx – Tomcat – MySQL)](#)
 		- [Using your script or deployment plan](#)
-- [!/bin/bash](#)
 	- [Provisioning & Auto-Scaling the Underlying Infrastructure on Any Cloud](#)
 	- [Deploying the Multi-Tier Java Application on the Rackspace Cluster](#)
 	- [Accessing The In-Browser Terminal For The Running Containers](#)
@@ -28,7 +27,6 @@
 	- [Enabling the Continuous Delivery Workflow with Jenkins to Update the WAR File of the Running Application when a Build is Triggered](#)
 	- [Scaling out the Tomcat Application Server Cluster](#)
 	- [Conclusion](#)
-
  
 
 DCHQ - Docker Java Example 
@@ -38,7 +36,6 @@ DCHQ - Docker Java Example
 
 A Step by Step Guide for Deploying & Managing a Java Application on Docker-based WebSphere, JBoss, Tomcat and Jetty Application Servers
 =======================================================================================================================================
-
  
 
 Background
