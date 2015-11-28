@@ -11,13 +11,7 @@ A Step by Step Guide for Deploying & Managing a Java Application on Docker-based
 Background
 ----------
 
-Java developers and DevOps professionals have long struggled to automate the deployment of enterprise Java applications. The complex nature of these applications usually meant that application dependencies and external integrations had to be re-configured each time an application was deployed in DEV/TEST environments.
-
-Many solutions advertised the “model once, deploy anywhere” message for application deployments. In reality, however there were always intricacies that made it very difficult to re-use an application template across both an on-premise vSphere virtual environment and an AWS environment, for example.
-
-More recently, however, Docker containers popularized the idea of packaging application components into Linux Containers that can be deployed exactly the same on any Linux host as long as Docker Engine is installed.
-
-Unfortunately containerizing enterprise Java applications is still a challenge mostly because existing application composition frameworks do not address complex dependencies, external integrations or auto-scaling workflows post-provision. Moreover, the ephemeral design of containers meant that developers had to spin up new containers and re-create the complex dependencies & external integrations with every version update.
+Containerizing enterprise Java applications is still a challenge mostly because existing application composition frameworks do not address complex dependencies, external integrations or auto-scaling workflows post-provision. Moreover, the ephemeral design of containers meant that developers had to spin up new containers and re-create the complex dependencies & external integrations with every version update.
 
 DCHQ, available in hosted and on-premise versions, addresses all of these challenges and simplifies the containerization of enterprise Java applications through an advance application composition framework that extends Docker Compose with cross-image environment variable bindings, extensible BASH script plug-ins that can be invoked at request time or post-provision, and application clustering for high availability across multiple hosts or regions with support for auto scaling.
 
@@ -25,7 +19,7 @@ Once an application is provisioned, a user can monitor the CPU, Memory, & I/O of
 
 In previous blogs, we demonstrated the end-to-end deployment automation of various Java applications (like Pizza Shop and Movie Store apps) on multi-tier Docker-based application stacks across 13 different clouds & virtualization platforms. For full list of these blogs, you can visit this page: <http://dchq.co/docker-java-applications.html>
 
-While previous blogs demonstrated the power of the DCHQ platform in automating the deployment and management of complex Java apps on any physical or cloud infrastructure, many users were still confused on some of the fundamental aspects of application modeling. These questions include:
+However many users were still confused on some of the fundamental aspects of application modeling. These questions include:
 
 -   Where do these **environment variables** come from in your YAML-based application template?
 
@@ -33,7 +27,7 @@ While previous blogs demonstrated the power of the DCHQ platform in automating t
 
 -   I already have a deployment plan for my WebLogic Application Server. Can I **run my own script** for deploying a Java application?
 
-To address these questions, we created a sample “Names Directory” Java application on GitHub that can be deployed on these application stacks:
+To address these questions, we created a sample “Names Directory” Java application in this GitHub project that can be deployed on these application stacks:
 
 -   Nginx (for load balancing)
 
@@ -41,9 +35,7 @@ To address these questions, we created a sample “Names Directory” Java appli
 
 -   MySQL, PostgreSQL, and Oracle (for the database)
 
-<https://github.com/dchqinc/dchq-docker-java-example>
-
-In this blog, we will provide a step-by-step guide for configuring, deploying and managing this Java application using different application stacks and on different cloud/virtual infrastructure.
+In this project, we will provide a step-by-step guide for configuring, deploying and managing this Java application using different application stacks and on different cloud/virtual infrastructure.
 
 We will cover:
 
@@ -68,7 +60,7 @@ We will cover:
 Configuring the web.xml and webapp-config.xml files in the Java application
 ---------------------------------------------------------------------------
 
-You can clone the sample “Names Directory” Java application from GitHub.
+You can clone this sample “Names Directory” Java application from GitHub.
 
 **git clone** <https://github.com/dchqinc/dchq-docker-java-example.git>
 
