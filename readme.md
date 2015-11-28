@@ -892,17 +892,14 @@ A user can now provision a number of Cloud Servers on the newly created cluster 
 
 Here’s the template for requesting a 4GB Cloud Server.
 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Medium:
-
-region: IAD
-
-description: Rackspace small instance
-
-instanceType: general1-4
-
-image: IAD/5ed162cc-b4eb-4371-b24a-a0ae73376c73
-
-count: 1
+  region: IAD
+  description: Rackspace small instance
+  instanceType: general1-4
+  image: IAD/5ed162cc-b4eb-4371-b24a-a0ae73376c73
+  count: 1
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The supported parameters for the Machine Compose template are summarized below:
 
