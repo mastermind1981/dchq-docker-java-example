@@ -6,6 +6,9 @@
 	- [Configuring the web.xml and webapp-config.xml files in the Java application](#configuring-the-webxml-and-webapp-configxml-files-in-the-java-application)
 	- [Using the liquibase bean to initialize the connected database](#using-the-liquibase-bean-to-initialize-the-connected-database)
 	- [Building the YAML-based application templates that can re-used on any Linux host running anywhere](#building-the-yaml-based-application-templates-that-can-re-used-on-any-linux-host-running-anywhere)
+		- [Plug-ins to configure Web Servers and Application Servers at Request Time and Post Provision](#plug-ins-to-configure-web-servers-and-application-servers-at-request-time--post-provision)
+		- [cluster_size and host Parameters for HA Deployment Across Multiple Hosts](#cluster_size-and-host-parameters-for-ha-deployment-across-multiple-hosts)
+		- [Environment Variable Bindings Across Images](#environment-variable-bindings-across-images)
 		- [3-Tier Java (Nginx – Tomcat – MySQL)](#3-tier-java-nginx--tomcat--mysql)
 		- [3-Tier Java (Nginx – Jetty – MySQL)](#3-tier-java-nginx--jetty--mysql)
 		- [3-Tier Java (Nginx – JBoss – MySQL)](#3-tier-java-nginx--jboss--mysql)
@@ -272,7 +275,7 @@ The application servers (Tomcat, Jetty, JBoss and WebSphere) are also invoking a
 
 <https://github.com/dchqinc/dchq-docker-java-example/raw/master/dbconnect.war>
 
-Tomcat, JBoss and Jetty are invoking the exact same BASH script plug-in (plug-in ID: **oncXN**) – except the WAR file is getting deployed on different directories:
+**Tomcat, JBoss and Jetty** are invoking the exact same BASH script plug-in (plug-in ID: **oncXN**) – except the WAR file is getting deployed on different directories:
 
 -   Tomcat – dir=/usr/local/tomcat/webapps/ROOT.war
 
@@ -293,7 +296,7 @@ curl -L -o $dir $file_url
 
 **$delete_dir**, **$dir** and **$file_url** are overrideable arguments that can be defined when creating the plug-ins or when requesting the application.
 
-WebSphere is invoking a different BASH script plug-in (plug-in ID: **rPuVb**) that will first execute init-server-env.sh and then deploy the Java WAR file from the accessible GitHub URL
+**WebSphere** is invoking a different BASH script plug-in (plug-in ID: **rPuVb**) that will first execute init-server-env.sh and then deploy the Java WAR file from the accessible GitHub URL
 
 <https://github.com/dchqinc/dchq-docker-java-example/raw/master/dbconnect.war>
 
@@ -319,7 +322,7 @@ wget $file_url -O $dir
 
 **$delete_dir**, **$dir** and **$file_url** are overrideable arguments that can be defined when creating the plug-ins or when requesting the application.
 
-### **cluster_size** and **host** parameters for HA across multiple hosts
+### **cluster_size** and **host** parameters for HA deployment across multiple hosts
 
 You will notice that the **cluster_size** parameter allows you to specify the number of containers to launch (with the same application dependencies).
 
