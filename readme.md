@@ -883,9 +883,9 @@ AppServer:
   cluster_size: 1
   environment:
     - database_driverClassName=com.mysql.jdbc.Driver
-    - database_url=jdbc:mysql://{{MySQL|container_ip}}:3306/{{MySQL|MYSQL_DATABASE}}
-    - database_username={{MySQL|MYSQL_USER}}
-    - database_password={{MySQL|MYSQL_ROOT_PASSWORD}}
+    - database_url=jdbc:mysql://{{MariaDB|container_ip}}:3306/{{MariaDB|MYSQL_DATABASE}}
+    - database_username={{MariaDB|MYSQL_USER}}
+    - database_password={{MariaDB|MYSQL_ROOT_PASSWORD}}
   plugins:
     - !plugin
       id: oncXN
@@ -926,9 +926,9 @@ AppServer:
   cluster_size: 1
   environment:
     - database_driverClassName=com.mysql.jdbc.Driver
-    - database_url=jdbc:mysql://{{MySQL|container_ip}}:3306/{{MySQL|MYSQL_DATABASE}}
-    - database_username={{MySQL|MYSQL_USER}}
-    - database_password={{MySQL|MYSQL_ROOT_PASSWORD}}
+    - database_url=jdbc:mysql://{{MariaDB|container_ip}}:3306/{{MariaDB|MYSQL_DATABASE}}
+    - database_username={{MariaDB|MYSQL_USER}}
+    - database_password={{MariaDB|MYSQL_ROOT_PASSWORD}}
   plugins:
     - !plugin
       id: oncXN
@@ -969,9 +969,9 @@ AppServer:
   cluster_size: 1
   environment:
     - database_driverClassName=com.mysql.jdbc.Driver
-    - database_url=jdbc:mysql://{{MySQL|container_ip}}:3306/{{MySQL|MYSQL_DATABASE}}
-    - database_username={{MySQL|MYSQL_USER}}
-    - database_password={{MySQL|MYSQL_ROOT_PASSWORD}}
+    - database_url=jdbc:mysql://{{MariaDB|container_ip}}:3306/{{MariaDB|MYSQL_DATABASE}}
+    - database_username={{MariaDB|MYSQL_USER}}
+    - database_password={{MariaDB|MYSQL_ROOT_PASSWORD}}
   plugins:
     - !plugin
       id: oncXN
@@ -1002,9 +1002,9 @@ AppServer:
   cluster_size: 1
   environment:
     - database_driverClassName=com.mysql.jdbc.Driver
-    - database_url=jdbc:mysql://{{MySQL|container_ip}}:3306/{{MySQL|MYSQL_DATABASE}}
-    - database_username={{MySQL|MYSQL_USER}}
-    - database_password={{MySQL|MYSQL_ROOT_PASSWORD}}
+    - database_url=jdbc:mysql://{{MariaDB|container_ip}}:3306/{{MariaDB|MYSQL_DATABASE}}
+    - database_username={{MariaDB|MYSQL_USER}}
+    - database_password={{MariaDB|MYSQL_ROOT_PASSWORD}}
     - LICENSE=accept
   plugins:
     - !plugin
@@ -1434,9 +1434,9 @@ AppServer:
   cluster_size: 1
   environment:
     - database_driverClassName=com.mysql.jdbc.Driver
-    - database_url=jdbc:mysql://{{MySQL|container_ip}}:3306/{{MySQL|MYSQL_DATABASE}}
-    - database_username={{MySQL|MYSQL_USER}}
-    - database_password={{MySQL|MYSQL_ROOT_PASSWORD}}
+    - database_url=jdbc:mysql://{{MariaDB|container_ip}}:3306/{{MariaDB|MYSQL_DATABASE}}
+    - database_username={{MariaDB|MYSQL_USER}}
+    - database_password={{MariaDB|MYSQL_ROOT_PASSWORD}}
   plugins:
     - !plugin
       id: oncXN
@@ -1477,9 +1477,9 @@ AppServer:
   cluster_size: 1
   environment:
     - database_driverClassName=com.mysql.jdbc.Driver
-    - database_url=jdbc:mysql://{{MySQL|container_ip}}:3306/{{MySQL|MYSQL_DATABASE}}
-    - database_username={{MySQL|MYSQL_USER}}
-    - database_password={{MySQL|MYSQL_ROOT_PASSWORD}}
+    - database_url=jdbc:mysql://{{MariaDB|container_ip}}:3306/{{MariaDB|MYSQL_DATABASE}}
+    - database_username={{MariaDB|MYSQL_USER}}
+    - database_password={{MariaDB|MYSQL_ROOT_PASSWORD}}
   plugins:
     - !plugin
       id: oncXN
@@ -1520,9 +1520,9 @@ AppServer:
   cluster_size: 1
   environment:
     - database_driverClassName=com.mysql.jdbc.Driver
-    - database_url=jdbc:mysql://{{MySQL|container_ip}}:3306/{{MySQL|MYSQL_DATABASE}}
-    - database_username={{MySQL|MYSQL_USER}}
-    - database_password={{MySQL|MYSQL_ROOT_PASSWORD}}
+    - database_url=jdbc:mysql://{{MariaDB|container_ip}}:3306/{{MariaDB|MYSQL_DATABASE}}
+    - database_username={{MariaDB|MYSQL_USER}}
+    - database_password={{MariaDB|MYSQL_ROOT_PASSWORD}}
   plugins:
     - !plugin
       id: oncXN
@@ -1598,7 +1598,7 @@ Provisioning & Auto-Scaling the Underlying Infrastructure on Any Cloud
 
 Once an application is saved, a user can register a Cloud Provider to automate the provisioning and auto-scaling of clusters on 12 different cloud end-points including VMware vSphere, OpenStack, CloudStack, Amazon Web Services, Rackspace, Microsoft Azure, DigitalOcean, IBM SoftLayer, Google Compute Engine, and many others.
 
-First, a user can register a Cloud Provider for Rackspace (for example) by navigating to **Manage** > **Repo & Cloud Provider** and then clicking on the **+** button to select **Rackspace**. The Rackspace API Key needs to be provided – which can be retrieved from the Account Settings section of the Rackspace Cloud Control Panel.
+First, a user can register a Cloud Provider for Rackspace (for example) by navigating to **Manage** > **Cloud Providers & Repos** and then clicking on the **+** button to select **Rackspace**. The Rackspace API Key needs to be provided – which can be retrieved from the Account Settings section of the Rackspace Cloud Control Panel.
 
 A user can then create a cluster with an auto-scale policy to automatically spin up new Cloud Servers. This can be done by navigating to **Manage** > **Clusters** page and then clicking on the **+** button. You can select a capacity-based placement policy and then **Weave** as the networking layer in order to facilitate secure, password-protected cross-container communication across multiple hosts within a cluster. The **Auto-Scale Policy** in this example sets the maximum number of VM’s (or Cloud Servers) to 10.
 
