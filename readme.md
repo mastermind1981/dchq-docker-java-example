@@ -86,7 +86,7 @@ However many users were still confused on some of the fundamental aspects of app
 
 To address these questions, we created a sample “Names Directory” Java application in this GitHub project that can be deployed on these application stacks:
 
--   Nginx (for load balancing)
+-   Apache HTTP Server (httpd) and Nginx (for load balancing)
 
 -   WebSphere, JBoss, Tomcat and Jetty (as the application server)
 
@@ -1725,15 +1725,15 @@ Scaling out the Tomcat Application Server Cluster
 
 If the running application becomes resource constrained, a user can to scale out the application to meet the increasing load. Moreover, a user can schedule the scale out during business hours and the scale in during weekends for example.
 
-To scale out the cluster of Tomcat servers from 2 to 4, a user can click on the **Actions** menu of the running application and then select **Scale Out**. A user can then specify the new size for the cluster and then click on **Run Now**.
+To scale out the cluster of Tomcat servers from 1 to 2, a user can click on the **Actions** menu of the running application and then select **Scale Out**. A user can then specify the new size for the cluster and then click on **Run Now**.
 
 <figure>
 <img src="screenshots/0-Scale%20Out.png"  />
 </figure>
 
-We then used the BASH plug-in to update Nginx’s default.conf file so that it’s aware of the new application server added. The BASH script plug-ins can also be scheduled to accommodate use cases like cleaning up logs or updating configurations at defined frequencies. 
+We then used the BASH plug-in to update Apache HTTP Server's httpd.conf file so that it’s aware of the new application server added. The BASH script plug-ins can also be scheduled to accommodate use cases like cleaning up logs or updating configurations at defined frequencies. 
 
-To execute a plug-in on a running container, a user can click on the **Actions** menu of the running application and then select **Plug-ins**. A user can then select the load balancer (Nginx) container, search for the plug-in that needs to be executed, enable container restart using the toggle button. The default argument for this plug-in will dynamically resolve all the container IP’s of the running Tomcat servers and add them as part of the default.conf file.
+To execute a plug-in on a running container, a user can click on the **Actions** menu of the running application and then select **Plug-ins**. A user can then select the load balancer (Apache HTTP Server) container, search for the plug-in that needs to be executed, enable container restart using the toggle button. The default argument for this plug-in will dynamically resolve all the container IP’s of the running Tomcat servers and add them as part of the httpd.conf file.
 
 <figure>
 <img src="screenshots/0-Plug-in%20Update%20Apache%20HTTP%20Server.png"  />
