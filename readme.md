@@ -1,3 +1,8 @@
+To run & manage the 22 Java application templates in this project, make sure that you either:
+-   **Sign Up for FREE on DCHQ.io** -- <http://dchq.io> (no credit card required), or
+-   **Download DCHQ On-Premise Standard Edition for FREE** -- <http://dchq.co/dchq-on-premise-download.html>
+
+
 **Table of Contents**  
 
 - [DCHQ - Docker Java Example ](#dchq---docker-java-example-)
@@ -242,7 +247,7 @@ The templates include examples of the following application stacks (for the same
 
 Across all these application templates, you will notice that some of the containers are invoking BASH script plug-ins at request time in order to configure the container. These plug-ins can be executed post-provision as well.
 
-These plug-ins can be created by navigating to **Manage > Plug-ins**. Once the BASH script is provided, the DCHQ agent will execute this script **inside the container**. A user can specify arguments that can be overridden at request time and post-provision. Anything preceded by the $ sign is considered an argument -- for example, $file_url can be an argument that allows developers to specify the download URL for a WAR file. This can be overridden at request time and post-provision when a user wants to refresh the Java WAR file on a running container.
+These plug-ins can be created by navigating to **Manage > Plug-ins**. Once the BASH script is provided, the DCHQ agent will execute this script **inside the container**. A user can specify arguments that can be overridden at request time and post-provision. Anything preceded by the **$** sign is considered an argument -- for example, **$file_url** can be an argument that allows developers to specify the download URL for a WAR file. This can be overridden at request time and post-provision when a user wants to refresh the Java WAR file on a running container.
 
 The plug-in ID needs to be provided when defining the YAML-based application template. For example, to invoke a BASH script plug-in for Nginx, we would reference the plug-in ID as follows:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
