@@ -41,7 +41,7 @@ To run & manage the **28** Java application templates in this project, make sure
 		- [3-Tier Java (ApacheHTTP – JBoss – Oracle-XE)](#3-tier-java-apachehttp--jboss--oracle-xe)
 		- [3-Tier Java (ApacheHTTP – Tomcat – MariaDB)](#3-tier-java-apachehttp--tomcat--mariadb)
 		- [3-Tier Java (ApacheHTTP – Jetty – MariaDB)](#3-tier-java-apachehttp--jetty--mariadb)
-		- [3-Tier Java (ApacheHTTP – JBoss – MariaDB)](#3-tier-java-apachehttpx--jboss--mariadb)
+		- [3-Tier Java (ApacheHTTP – JBoss – MariaDB)](#3-tier-java-apachehttp--jboss--mariadb)
 		- [Invoking a plug-in to initialize the database separately on a 3-Tier Java (Nginx – Tomcat – MySQL)](#invoking-a-plug-in-to-initialize-the-database-separately-on-a-3-tier-java-nginx--tomcat--mysql)
 		- [Using your script or deployment plan](#using-your-script-or-deployment-plan)
 	- [Provisioning & Auto-Scaling the Underlying Infrastructure on Any Cloud](#provisioning--auto-scaling-the-underlying-infrastructure-on-any-cloud)
