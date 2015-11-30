@@ -18,6 +18,22 @@
 		- [3-Tier Java (Nginx – Jetty – Oracle-XE)](#3-tier-java-nginx--jetty--oracle-xe)
 		- [3-Tier Java (Nginx – JBoss – Oracle-XE)](#3-tier-java-nginx--jboss--oracle-xe)
 		- [2-Tier Java (WebSphere – Oracle-XE)](#2-tier-java-websphere--oracle-xe)
+		- [3-Tier Java (Nginx – Tomcat – MariaDB)](#3-tier-java-nginx--tomcat--mariadb)
+		- [3-Tier Java (Nginx – Jetty – MariaDB)](#3-tier-java-nginx--jetty--mariadb)
+		- [3-Tier Java (Nginx – JBoss – MariaDB)](#3-tier-java-nginx--jboss--mariadb)
+		- [2-Tier Java (WebSphere – MariaDB)](#2-tier-java-websphere--mariadb)
+		- [3-Tier Java (ApacheHTTP – Tomcat – MySQL)](#3-tier-java-apachehttp--tomcat--mysql)
+		- [3-Tier Java (ApacheHTTP – Jetty – MySQL)](#3-tier-java-apachehttp--jetty--mysql)
+		- [3-Tier Java (ApacheHTTP – JBoss – MySQL)](#3-tier-java-apachehttp--jboss--mysql)
+		- [3-Tier Java (ApacheHTTP – Tomcat – PostgreSQL)](#3-tier-java-apachehttp--tomcat--postgresql)
+		- [3-Tier Java (ApacheHTTP – Jetty – PostgreSQL)](#3-tier-java-apachehttp--jetty--postgresql)
+		- [3-Tier Java (ApacheHTTP – JBoss – PostgreSQL)](#3-tier-java-apachehttp--jboss--postgresql)
+		- [3-Tier Java (ApacheHTTP – Tomcat – Oracle-XE)](#3-tier-java-apachehttp--tomcat--oracle-xe)
+		- [3-Tier Java (ApacheHTTP – Jetty – Oracle-XE)](#3-tier-java-apachehttp--jetty--oracle-xe)
+		- [3-Tier Java (ApacheHTTP – JBoss – Oracle-XE)](#3-tier-java-apachehttp--jboss--oracle-xe)
+		- [3-Tier Java (ApacheHTTP – Tomcat – MariaDB)](#3-tier-java-apachehttp--tomcat--mariadb)
+		- [3-Tier Java (ApacheHTTP – Jetty – MariaDB)](#3-tier-java-apachehttp--jetty--mariadb)
+		- [3-Tier Java (ApacheHTTP – JBoss – MariaDB)](#3-tier-java-apachehttpx--jboss--mariadb)
 		- [Invoking a plug-in to initialize the database separately on a 3-Tier Java (Nginx – Tomcat – MySQL)](#invoking-a-plug-in-to-initialize-the-database-separately-on-a-3-tier-java-nginx--tomcat--mysql)
 		- [Using your script or deployment plan](#using-your-script-or-deployment-plan)
 	- [Provisioning & Auto-Scaling the Underlying Infrastructure on Any Cloud](#provisioning--auto-scaling-the-underlying-infrastructure-on-any-cloud)
@@ -212,39 +228,51 @@ Building the YAML-based application templates that can re-used on any Linux host
 
 Once logged in to DCHQ (either the hosted DCHQ.io or on-premise version), a user can navigate to **Manage** > **Templates** and then click on the **+** button to create a new **Docker Compose** template.
 
-We have created 12 application templates **using the official images from Docker Hub** for the same “Names Directory” Java application – but for different application servers and databases.
+We have created **28 application templates** using the **official images from Docker Hub** for the same “Names Directory” Java application – but for different application servers and databases.
 
--   3-Tier Java (Nginx – Tomcat – MySQL)
+The templates include examples of the following application stacks (for the same Java application):
+-   **Apache HTTP Server (httpd) & Nginx** -- for load balancing
+-   **Tomcat, Jetty, WebSphere and JBoss** -- for the application servers
+-   **MySQL, MariaDB, PostgreSQL and Oracle XE** -- for the databases
 
--   3-Tier Java (Nginx – Jetty – MySQL)
+### Plug-ins to Configure Web Servers and Application Servers at **Request Time & Post-Provision**
 
--   3-Tier Java (Nginx – JBoss – MySQL)
+Across all these application templates, you will notice that some of the containers are invoking BASH script plug-ins at request time in order to configure the container. These plug-ins can be executed post-provision as well.
 
--   2-Tier Java (WebSphere – MySQL)
+These plug-ins can be created by navigating to **Manage > Plug-ins**. Once the BASH script is provided, the DCHQ agent will execute this script **inside the container**. A user can specify arguments that can be overridden at request time and post-provision. Anything preceded by the $ sign is considered an argument -- for example, $file_url can be an argument that allows developers to specify the download URL for a WAR file. This can be overridden at request time and post-provision when a user wants to refresh the Java WAR file on a running container.
 
--   3-Tier Java (Nginx – Tomcat – PostgreSQL)
+The plug-in ID needs to be provided when defining the YAML-based application template. For example, to invoke a BASH script plug-in for Nginx, we would reference the plug-in ID as follows:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+LB:
+  image: nginx:latest
+  publish_all: true
+  mem_min: 50m
+  host: host1
+  plugins:
+    - !plugin
+      id: 0H1Nk
+      restart: true
+      arguments:
+        - servers=server {{AppServer | container_ip}}:8080;
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--   3-Tier Java (Nginx – Jetty – PostgreSQL)
+In the example templates, we are invoking 4 BASH script plug-ins.
 
--   3-Tier Java (Nginx – JBoss – PostgreSQL)
+**Nginx** is invoking a BASH script plug-in that injects container IP’s of the application servers in the default.conf file dynamically (or at request time). The plug-in ID is **0H1Nk**.
 
--   2-Tier Java (WebSphere – PostgreSQL)
+**Apache HTTP Server (httpd)** is invoking a BASH script plug-in that injects container IP’s of the application servers in the httpd.conf file dynamically (or at request time). The plug-in ID is **uazUi**.
 
--   3-Tier Java (Nginx – Tomcat – Oracle-XE)
+The beauty of the Nginx and Apache HTTP Server (httpd) plug-ins is that they can be executed post-provision as part of the application server cluster scale in or scale out. This makes it possible to define auto-scale policies that automatically update the web server (or load balancer).
 
--   3-Tier Java (Nginx – Jetty – Oracle-XE)
-
--   3-Tier Java (Nginx – JBoss – Oracle-XE)
-
--   2-Tier Java (WebSphere – Oracle-XE)
-
-Across all these application templates, you will notice that Nginx is invoking a BASH script plug-in to add the container IP’s of the application servers in the default.conf file dynamically (or at request time).
+To get access to the Nginx and Apache HTTP Server (httpd) plug-ins under the EULA license, make sure you either:
+-   **Sign Up for FREE on DCHQ.io** -- <http://dchq.io> (no credit card required)
+-   **Download DCHQ On-Premise Standard Edition for FREE** -- <http://dchq.co/dchq-on-premise-download.html>
 
 The application servers (Tomcat, Jetty, JBoss and WebSphere) are also invoking a BASH script plug-in to deploy the Java WAR file from the accessible GitHub URL.
 
 <https://github.com/dchqinc/dchq-docker-java-example/raw/master/dbconnect.war>
 
-Tomcat, JBoss and Jetty are invoking the exact same BASH script plug-in – except the WAR file is getting deployed on different directories:
+Tomcat, JBoss and Jetty are invoking the exact same BASH script plug-in (plug-in ID: **oncXN**) – except the WAR file is getting deployed on different directories:
 
 -   Tomcat – dir=/usr/local/tomcat/webapps/ROOT.war
 
@@ -265,7 +293,7 @@ curl -L -o $dir $file_url
 
 **$delete_dir**, **$dir** and **$file_url** are overrideable arguments that can be defined when creating the plug-ins or when requesting the application.
 
-WebSphere is invoking a different BASH script plug-in that will first execute init-server-env.sh and then deploy the Java WAR file from the accessible GitHub URL
+WebSphere is invoking a different BASH script plug-in (plug-in ID: **rPuVb**) that will first execute init-server-env.sh and then deploy the Java WAR file from the accessible GitHub URL
 
 <https://github.com/dchqinc/dchq-docker-java-example/raw/master/dbconnect.war>
 
@@ -291,9 +319,11 @@ wget $file_url -O $dir
 
 **$delete_dir**, **$dir** and **$file_url** are overrideable arguments that can be defined when creating the plug-ins or when requesting the application.
 
+### **cluster_size** and **host** parameters for HA across multiple hosts
+
 You will notice that the **cluster_size** parameter allows you to specify the number of containers to launch (with the same application dependencies).
 
-The **host** parameter allows you to specify the host you would like to use for container deployments. This is possible if you have selected Weave as the networking layer when creating your clusters. That way you can ensure high-availability for your application server clusters across different hosts (or regions) and you can comply with affinity rules to ensure that the database runs on a separate host for example. Here are the values supported for the host parameter:
+The **host** parameter allows you to specify the host you would like to use for container deployments. This is possible if you have selected **Weave** as the networking layer when creating your clusters. That way you can ensure high-availability for your application server clusters across different hosts (or regions) and you can comply with affinity rules to ensure that the database runs on a separate host for example. Here are the values supported for the host parameter:
 
 -   *host1, host2, host3*, etc. – selects a host randomly within a data-center (or cluster) for container deployments
 
@@ -302,6 +332,8 @@ The **host** parameter allows you to specify the host you would like to use for 
 -   *Hostname 1, Hostname 2, etc.* -- allows a user to specify the actual hostnames to use for container deployments
 
 -   *Wildcards* (e.g. “db-*”, or “app-srv-*”) – to specify the wildcards to use within a hostname
+
+### Environment Variable Bindings Across Images
 
 Additionally, a user can create cross-image environment variable bindings by making a reference to another image’s environment variable. In this case, we have made several bindings – including database_url=jdbc:mysql://{{MySQL|container_ip}}:3306/{{MySQL|MYSQL_DATABASE}} – in which the database container IP is resolved dynamically at request time and is used to ensure that the application servers can establish a connection with the database.
 
@@ -822,6 +854,686 @@ Oracle:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
  
+
+### 3-Tier Java (Nginx – Tomcat – MariaDB)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+LB:
+  image: nginx:latest
+  publish_all: true
+  mem_min: 50m
+  host: host1
+  plugins:
+    - !plugin
+      id: 0H1Nk
+      restart: true
+      arguments:
+        - servers=server {{AppServer | container_ip}}:8080;
+AppServer:
+  image: tomcat:8.0.21-jre8
+  mem_min: 600m
+  host: host1
+  cluster_size: 1
+  environment:
+    - database_driverClassName=com.mysql.jdbc.Driver
+    - database_url=jdbc:mysql://{{MySQL|container_ip}}:3306/{{MySQL|MYSQL_DATABASE}}
+    - database_username={{MySQL|MYSQL_USER}}
+    - database_password={{MySQL|MYSQL_ROOT_PASSWORD}}
+  plugins:
+    - !plugin
+      id: oncXN
+      restart: true
+      arguments:
+        - file_url=https://github.com/dchqinc/dchq-docker-java-example/raw/master/dbconnect.war
+        - dir=/usr/local/tomcat/webapps/ROOT.war
+        - delete_dir=/usr/local/tomcat/webapps/ROOT
+MariaDB:
+  image: mariadb:latest
+  host: host1
+  mem_min: 400m
+  environment:
+    - MYSQL_USER=root
+    - MYSQL_DATABASE=names
+    - MYSQL_ROOT_PASSWORD={{alphanumeric|8}}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+### 3-Tier Java (Nginx – Jetty – MariaDB)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+LB:
+  image: nginx:latest
+  publish_all: true
+  mem_min: 50m
+  host: host1
+  plugins:
+    - !plugin
+      id: 0H1Nk
+      restart: true
+      arguments:
+        - servers=server {{AppServer | container_ip}}:8080;
+AppServer:
+  image: jetty:latest
+  mem_min: 600m
+  host: host1
+  cluster_size: 1
+  environment:
+    - database_driverClassName=com.mysql.jdbc.Driver
+    - database_url=jdbc:mysql://{{MySQL|container_ip}}:3306/{{MySQL|MYSQL_DATABASE}}
+    - database_username={{MySQL|MYSQL_USER}}
+    - database_password={{MySQL|MYSQL_ROOT_PASSWORD}}
+  plugins:
+    - !plugin
+      id: oncXN
+      restart: true
+      arguments:
+        - file_url=https://github.com/dchqinc/dchq-docker-java-example/raw/master/dbconnect.war
+        - dir=/var/lib/jetty/webapps/ROOT.war
+        - delete_dir=/var/lib/jetty/webapps/ROOT
+MariaDB:
+  image: mariadb:latest
+  host: host1
+  mem_min: 400m
+  environment:
+    - MYSQL_USER=root
+    - MYSQL_DATABASE=names
+    - MYSQL_ROOT_PASSWORD={{alphanumeric|8}}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+### 3-Tier Java (Nginx – JBoss – MariaDB)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+LB:
+  image: nginx:latest
+  publish_all: true
+  mem_min: 50m
+  host: host1
+  plugins:
+    - !plugin
+      id: 0H1Nk
+      restart: true
+      arguments:
+        - servers=server {{AppServer | container_ip}}:8080;
+AppServer:
+  image: jboss/wildfly:latest
+  mem_min: 600m
+  host: host1
+  cluster_size: 1
+  environment:
+    - database_driverClassName=com.mysql.jdbc.Driver
+    - database_url=jdbc:mysql://{{MySQL|container_ip}}:3306/{{MySQL|MYSQL_DATABASE}}
+    - database_username={{MySQL|MYSQL_USER}}
+    - database_password={{MySQL|MYSQL_ROOT_PASSWORD}}
+  plugins:
+    - !plugin
+      id: oncXN
+      restart: true
+      arguments:
+        - file_url=https://github.com/dchqinc/dchq-docker-java-example/raw/master/dbconnect.war
+        - dir=/opt/jboss/wildfly/standalone/deployments/ROOT.war
+        - delete_dir=/opt/jboss/wildfly/standalone/deployments/ROOT
+MariaDB:
+  image: mariadb:latest
+  host: host1
+  mem_min: 400m
+  environment:
+    - MYSQL_USER=root
+    - MYSQL_DATABASE=names
+    - MYSQL_ROOT_PASSWORD={{alphanumeric|8}}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+### 2-Tier Java (WebSphere – MariaDB)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+AppServer:
+  image: websphere-liberty:webProfile6
+  publish_all: true
+  mem_min: 600m
+  host: host1
+  cluster_size: 1
+  environment:
+    - database_driverClassName=com.mysql.jdbc.Driver
+    - database_url=jdbc:mysql://{{MySQL|container_ip}}:3306/{{MySQL|MYSQL_DATABASE}}
+    - database_username={{MySQL|MYSQL_USER}}
+    - database_password={{MySQL|MYSQL_ROOT_PASSWORD}}
+    - LICENSE=accept
+  plugins:
+    - !plugin
+      id: rPuVb
+      restart: true
+      arguments:
+        - file_url=https://github.com/dchqinc/dchq-docker-java-example/raw/master/dbconnect.war
+        - dir=/opt/ibm/wlp/usr/servers/defaultServer/dropins/dbconnect.war
+        - delete_dir=/opt/ibm/wlp/usr/servers/defaultServer/dropins/dbconnect
+MariaDB:
+  image: mariadb:latest
+  host: host1
+  mem_min: 400m
+  environment:
+    - MYSQL_USER=root
+    - MYSQL_DATABASE=names
+    - MYSQL_ROOT_PASSWORD={{alphanumeric|8}}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+### 3-Tier Java (ApacheHTTP – Tomcat – MySQL)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+HTTP-LB:
+  image: httpd:latest
+  publish_all: true
+  mem_min: 50m
+  host: host1
+  plugins:
+    - !plugin
+      id: uazUi
+      restart: true
+      arguments:
+        - BalancerMembers=BalancerMember http://{{AppServer | container_ip}}:8080
+AppServer:
+  image: tomcat:8.0.21-jre8
+  mem_min: 600m
+  host: host1
+  cluster_size: 1
+  environment:
+    - database_driverClassName=com.mysql.jdbc.Driver
+    - database_url=jdbc:mysql://{{MySQL|container_ip}}:3306/{{MySQL|MYSQL_DATABASE}}
+    - database_username={{MySQL|MYSQL_USER}}
+    - database_password={{MySQL|MYSQL_ROOT_PASSWORD}}
+  plugins:
+    - !plugin
+      id: oncXN
+      restart: true
+      arguments:
+        - file_url=https://github.com/dchqinc/dchq-docker-java-example/raw/master/dbconnect.war
+        - dir=/usr/local/tomcat/webapps/ROOT.war
+        - delete_dir=/usr/local/tomcat/webapps/ROOT
+MySQL:
+  image: mysql:latest
+  host: host1
+  mem_min: 400m
+  environment:
+    - MYSQL_USER=root
+    - MYSQL_DATABASE=names
+    - MYSQL_ROOT_PASSWORD={{alphanumeric|8}}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+### 3-Tier Java (ApacheHTTP – Jetty – MySQL)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+HTTP-LB:
+  image: httpd:latest
+  publish_all: true
+  mem_min: 50m
+  host: host1
+  plugins:
+    - !plugin
+      id: uazUi
+      restart: true
+      arguments:
+        - BalancerMembers=BalancerMember http://{{AppServer | container_ip}}:8080
+AppServer:
+  image: jetty:latest
+  mem_min: 600m
+  host: host1
+  cluster_size: 1
+  environment:
+    - database_driverClassName=com.mysql.jdbc.Driver
+    - database_url=jdbc:mysql://{{MySQL|container_ip}}:3306/{{MySQL|MYSQL_DATABASE}}
+    - database_username={{MySQL|MYSQL_USER}}
+    - database_password={{MySQL|MYSQL_ROOT_PASSWORD}}
+  plugins:
+    - !plugin
+      id: oncXN
+      restart: true
+      arguments:
+        - file_url=https://github.com/dchqinc/dchq-docker-java-example/raw/master/dbconnect.war
+        - dir=/var/lib/jetty/webapps/ROOT.war
+        - delete_dir=/var/lib/jetty/webapps/ROOT
+MySQL:
+  image: mysql:latest
+  host: host1
+  mem_min: 400m
+  environment:
+    - MYSQL_USER=root
+    - MYSQL_DATABASE=names
+    - MYSQL_ROOT_PASSWORD={{alphanumeric|8}}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+### 3-Tier Java (ApacheHTTP – JBoss – MySQL)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+HTTP-LB:
+  image: httpd:latest
+  publish_all: true
+  mem_min: 50m
+  host: host1
+  plugins:
+    - !plugin
+      id: uazUi
+      restart: true
+      arguments:
+        - BalancerMembers=BalancerMember http://{{AppServer | container_ip}}:8080
+AppServer:
+  image: jboss/wildfly:latest
+  mem_min: 600m
+  host: host1
+  cluster_size: 1
+  environment:
+    - database_driverClassName=com.mysql.jdbc.Driver
+    - database_url=jdbc:mysql://{{MySQL|container_ip}}:3306/{{MySQL|MYSQL_DATABASE}}
+    - database_username={{MySQL|MYSQL_USER}}
+    - database_password={{MySQL|MYSQL_ROOT_PASSWORD}}
+  plugins:
+    - !plugin
+      id: oncXN
+      restart: true
+      arguments:
+        - file_url=https://github.com/dchqinc/dchq-docker-java-example/raw/master/dbconnect.war
+        - dir=/opt/jboss/wildfly/standalone/deployments/ROOT.war
+        - delete_dir=/opt/jboss/wildfly/standalone/deployments/ROOT
+MySQL:
+  image: mysql:latest
+  host: host1
+  mem_min: 400m
+  environment:
+    - MYSQL_USER=root
+    - MYSQL_DATABASE=names
+    - MYSQL_ROOT_PASSWORD={{alphanumeric|8}}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+### 3-Tier Java (ApacheHTTP – Tomcat – PostgreSQL)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+HTTP-LB:
+  image: httpd:latest
+  publish_all: true
+  mem_min: 50m
+  host: host1
+  plugins:
+    - !plugin
+      id: uazUi
+      restart: true
+      arguments:
+        - BalancerMembers=BalancerMember http://{{AppServer | container_ip}}:8080
+AppServer:
+  image: tomcat:8.0.21-jre8
+  mem_min: 600m
+  host: host1
+  cluster_size: 1
+  environment:
+    - database_driverClassName=org.postgresql.Driver
+    - database_url=jdbc:postgresql://{{Postgres|container_ip}}:5432/{{Postgres|POSTGRES_DB}}
+    - database_username={{Postgres|POSTGRES_USER}}
+    - database_password={{Postgres|POSTGRES_PASSWORD}}
+  plugins:
+    - !plugin
+      id: oncXN
+      restart: true
+      arguments:
+        - file_url=https://github.com/dchqinc/dchq-docker-java-example/raw/master/dbconnect.war
+        - dir=/usr/local/tomcat/webapps/ROOT.war
+        - delete_dir=/usr/local/tomcat/webapps/ROOT
+Postgres:
+  image: postgres:latest
+  host: host1
+  mem_min: 400m
+  environment:
+    - POSTGRES_USER=root
+    - POSTGRES_PASSWORD={{alphanumeric | 8}}
+    - POSTGRES_DB=names
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+### 3-Tier Java (ApacheHTTP – Jetty – PostgreSQL)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+HTTP-LB:
+  image: httpd:latest
+  publish_all: true
+  mem_min: 50m
+  host: host1
+  plugins:
+    - !plugin
+      id: uazUi
+      restart: true
+      arguments:
+        - BalancerMembers=BalancerMember http://{{AppServer | container_ip}}:8080
+AppServer:
+  image: jetty:latest
+  mem_min: 600m
+  host: host1
+  cluster_size: 1
+  environment:
+    - database_driverClassName=org.postgresql.Driver
+    - database_url=jdbc:postgresql://{{Postgres|container_ip}}:5432/{{Postgres|POSTGRES_DB}}
+    - database_username={{Postgres|POSTGRES_USER}}
+    - database_password={{Postgres|POSTGRES_PASSWORD}}
+  plugins:
+    - !plugin
+      id: oncXN
+      restart: true
+      arguments:
+        - file_url=https://github.com/dchqinc/dchq-docker-java-example/raw/master/dbconnect.war
+        - dir=/var/lib/jetty/webapps/ROOT.war
+        - delete_dir=/var/lib/jetty/webapps/ROOT
+Postgres:
+  image: postgres:latest
+  host: host1
+  mem_min: 400m
+  environment:
+    - POSTGRES_USER=root
+    - POSTGRES_PASSWORD={{alphanumeric | 8}}
+    - POSTGRES_DB=names
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+### 3-Tier Java (ApacheHTTP – JBoss – PostgreSQL)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+HTTP-LB:
+  image: httpd:latest
+  publish_all: true
+  mem_min: 50m
+  host: host1
+  plugins:
+    - !plugin
+      id: uazUi
+      restart: true
+      arguments:
+        - BalancerMembers=BalancerMember http://{{AppServer | container_ip}}:8080
+AppServer:
+  image: jboss/wildfly:latest
+  mem_min: 600m
+  host: host1
+  cluster_size: 1
+  environment:
+    - database_driverClassName=org.postgresql.Driver
+    - database_url=jdbc:postgresql://{{Postgres|container_ip}}:5432/{{Postgres|POSTGRES_DB}}
+    - database_username={{Postgres|POSTGRES_USER}}
+    - database_password={{Postgres|POSTGRES_PASSWORD}}
+  plugins:
+    - !plugin
+      id: oncXN
+      restart: true
+      arguments:
+        - file_url=https://github.com/dchqinc/dchq-docker-java-example/raw/master/dbconnect.war
+        - dir=/opt/jboss/wildfly/standalone/deployments/ROOT.war
+        - delete_dir=/opt/jboss/wildfly/standalone/deployments/ROOT
+Postgres:
+  image: postgres:latest
+  host: host1
+  mem_min: 400m
+  environment:
+    - POSTGRES_USER=root
+    - POSTGRES_PASSWORD={{alphanumeric | 8}}
+    - POSTGRES_DB=names
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+### 3-Tier Java (ApacheHTTP – Tomcat – Oracle-XE)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+HTTP-LB:
+  image: httpd:latest
+  publish_all: true
+  mem_min: 50m
+  host: host1
+  plugins:
+    - !plugin
+      id: uazUi
+      restart: true
+      arguments:
+        - BalancerMembers=BalancerMember http://{{AppServer | container_ip}}:8080
+AppServer:
+  image: tomcat:8.0.21-jre8
+  mem_min: 600m
+  host: host1
+  cluster_size: 1
+  environment:
+    - database_driverClassName=oracle.jdbc.OracleDriver
+    - database_url=jdbc:oracle:thin:@//{{Oracle|container_ip}}:1521/{{Oracle|sid}}
+    - database_username={{Oracle|username}}
+    - database_password={{Oracle|password}}
+    - TZ=UTC
+  plugins:
+    - !plugin
+      id: oncXN
+      restart: true
+      arguments:
+        - file_url=https://github.com/dchqinc/dchq-docker-java-example/raw/master/dbconnect.war
+        - dir=/usr/local/tomcat/webapps/ROOT.war
+        - delete_dir=/usr/local/tomcat/webapps/ROOT
+Oracle:
+  image: wnameless/oracle-xe-11g:latest
+  host: host1
+  mem_min: 400m
+  environment:
+    - username=system
+    - password=oracle
+    - sid=xe
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+### 3-Tier Java (ApacheHTTP – Jetty – Oracle-XE)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+HTTP-LB:
+  image: httpd:latest
+  publish_all: true
+  mem_min: 50m
+  host: host1
+  plugins:
+    - !plugin
+      id: uazUi
+      restart: true
+      arguments:
+        - BalancerMembers=BalancerMember http://{{AppServer | container_ip}}:8080
+AppServer:
+  image: jetty:latest
+  mem_min: 600m
+  host: host1
+  cluster_size: 1
+  environment:
+    - database_driverClassName=oracle.jdbc.OracleDriver
+    - database_url=jdbc:oracle:thin:@//{{Oracle|container_ip}}:1521/{{Oracle|sid}}
+    - database_username={{Oracle|username}}
+    - database_password={{Oracle|password}}
+  plugins:
+    - !plugin
+      id: oncXN
+      restart: true
+      arguments:
+        - file_url=https://github.com/dchqinc/dchq-docker-java-example/raw/master/dbconnect.war
+        - dir=/var/lib/jetty/webapps/ROOT.war
+        - delete_dir=/var/lib/jetty/webapps/ROOT
+Oracle:
+  image: wnameless/oracle-xe-11g:latest
+  host: host1
+  mem_min: 400m
+  environment:
+    - username=system
+    - password=oracle
+    - sid=xe
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+### 3-Tier Java (ApacheHTTP – JBoss – Oracle-XE)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+HTTP-LB:
+  image: httpd:latest
+  publish_all: true
+  mem_min: 50m
+  host: host1
+  plugins:
+    - !plugin
+      id: uazUi
+      restart: true
+      arguments:
+        - BalancerMembers=BalancerMember http://{{AppServer | container_ip}}:8080
+AppServer:
+  image: jboss/wildfly:latest
+  mem_min: 600m
+  host: host1
+  cluster_size: 1
+  environment:
+    - database_driverClassName=oracle.jdbc.OracleDriver
+    - database_url=jdbc:oracle:thin:@//{{Oracle|container_ip}}:1521/{{Oracle|sid}}
+    - database_username={{Oracle|username}}
+    - database_password={{Oracle|password}}
+  plugins:
+    - !plugin
+      id: oncXN
+      restart: true
+      arguments:
+        - file_url=https://github.com/dchqinc/dchq-docker-java-example/raw/master/dbconnect.war
+        - dir=/opt/jboss/wildfly/standalone/deployments/ROOT.war
+        - delete_dir=/opt/jboss/wildfly/standalone/deployments/ROOT
+Oracle:
+  image: wnameless/oracle-xe-11g:latest
+  host: host1
+  mem_min: 400m
+  environment:
+    - username=system
+    - password=oracle
+    - sid=xe
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+### 3-Tier Java (ApacheHTTP – Tomcat – MariaDB)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+HTTP-LB:
+  image: httpd:latest
+  publish_all: true
+  mem_min: 50m
+  host: host1
+  plugins:
+    - !plugin
+      id: uazUi
+      restart: true
+      arguments:
+        - BalancerMembers=BalancerMember http://{{AppServer | container_ip}}:8080
+AppServer:
+  image: tomcat:8.0.21-jre8
+  mem_min: 600m
+  host: host1
+  cluster_size: 1
+  environment:
+    - database_driverClassName=com.mysql.jdbc.Driver
+    - database_url=jdbc:mysql://{{MySQL|container_ip}}:3306/{{MySQL|MYSQL_DATABASE}}
+    - database_username={{MySQL|MYSQL_USER}}
+    - database_password={{MySQL|MYSQL_ROOT_PASSWORD}}
+  plugins:
+    - !plugin
+      id: oncXN
+      restart: true
+      arguments:
+        - file_url=https://github.com/dchqinc/dchq-docker-java-example/raw/master/dbconnect.war
+        - dir=/usr/local/tomcat/webapps/ROOT.war
+        - delete_dir=/usr/local/tomcat/webapps/ROOT
+MariaDB:
+  image: mariadb:latest
+  host: host1
+  mem_min: 400m
+  environment:
+    - MYSQL_USER=root
+    - MYSQL_DATABASE=names
+    - MYSQL_ROOT_PASSWORD={{alphanumeric|8}}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+### 3-Tier Java (ApacheHTTP – Jetty – MariaDB)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+HTTP-LB:
+  image: httpd:latest
+  publish_all: true
+  mem_min: 50m
+  host: host1
+  plugins:
+    - !plugin
+      id: uazUi
+      restart: true
+      arguments:
+        - BalancerMembers=BalancerMember http://{{AppServer | container_ip}}:8080
+AppServer:
+  image: jetty:latest
+  mem_min: 600m
+  host: host1
+  cluster_size: 1
+  environment:
+    - database_driverClassName=com.mysql.jdbc.Driver
+    - database_url=jdbc:mysql://{{MySQL|container_ip}}:3306/{{MySQL|MYSQL_DATABASE}}
+    - database_username={{MySQL|MYSQL_USER}}
+    - database_password={{MySQL|MYSQL_ROOT_PASSWORD}}
+  plugins:
+    - !plugin
+      id: oncXN
+      restart: true
+      arguments:
+        - file_url=https://github.com/dchqinc/dchq-docker-java-example/raw/master/dbconnect.war
+        - dir=/var/lib/jetty/webapps/ROOT.war
+        - delete_dir=/var/lib/jetty/webapps/ROOT
+MariaDB:
+  image: mariadb:latest
+  host: host1
+  mem_min: 400m
+  environment:
+    - MYSQL_USER=root
+    - MYSQL_DATABASE=names
+    - MYSQL_ROOT_PASSWORD={{alphanumeric|8}}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+### 3-Tier Java (ApacheHTTP – JBoss – MariaDB)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+HTTP-LB:
+  image: httpd:latest
+  publish_all: true
+  mem_min: 50m
+  host: host1
+  plugins:
+    - !plugin
+      id: uazUi
+      restart: true
+      arguments:
+        - BalancerMembers=BalancerMember http://{{AppServer | container_ip}}:8080
+AppServer:
+  image: jboss/wildfly:latest
+  mem_min: 600m
+  host: host1
+  cluster_size: 1
+  environment:
+    - database_driverClassName=com.mysql.jdbc.Driver
+    - database_url=jdbc:mysql://{{MySQL|container_ip}}:3306/{{MySQL|MYSQL_DATABASE}}
+    - database_username={{MySQL|MYSQL_USER}}
+    - database_password={{MySQL|MYSQL_ROOT_PASSWORD}}
+  plugins:
+    - !plugin
+      id: oncXN
+      restart: true
+      arguments:
+        - file_url=https://github.com/dchqinc/dchq-docker-java-example/raw/master/dbconnect.war
+        - dir=/opt/jboss/wildfly/standalone/deployments/ROOT.war
+        - delete_dir=/opt/jboss/wildfly/standalone/deployments/ROOT
+MariaDB:
+  image: mariadb:latest
+  host: host1
+  mem_min: 400m
+  environment:
+    - MYSQL_USER=root
+    - MYSQL_DATABASE=names
+    - MYSQL_ROOT_PASSWORD={{alphanumeric|8}}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 
+
 
 ### Invoking a plug-in to initialize the database separately on a 3-Tier Java (Nginx – Tomcat – MySQL)
 
