@@ -1,4 +1,4 @@
-To run & manage the **28** Java application templates in this project, make sure that you either:
+To run & manage the **28** Java application templates in this project on 13 different clouds and virtualization platforms (including vSphere, OpenStack, AWS, Rackspace, Microsoft Azure, Google Compute Engine, DigitalOcean, IBM SoftLayer, etc.), make sure that you either:
 -   **Sign Up for FREE on DCHQ.io** -- <http://dchq.io> (no credit card required), or
 -   **Download DCHQ On-Premise Standard Edition for FREE** -- <http://dchq.co/dchq-on-premise-download.html>
 
@@ -55,6 +55,9 @@ To run & manage the **28** Java application templates in this project, make sure
 
 DCHQ - Docker Java Example 
 ===========================
+<figure>
+<img src="/screenshots/0-Names%20Directory%20Java%20App.png" alt="" />
+</figure>
 
  
 
