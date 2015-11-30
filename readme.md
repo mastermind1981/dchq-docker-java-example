@@ -304,11 +304,15 @@ curl -L -o $dir $file_url
 
 **$delete_dir**, **$dir** and **$file_url** are overrideable arguments that can be defined when creating the plug-ins or when requesting the application.
 
+<figure>
+<img src="screenshots/0-Java%20WAR%20File%20Deployment%20Plug-in.png"  />
+</figure>
+
 **WebSphere** is invoking a different BASH script plug-in (plug-in ID: **rPuVb**) that will first execute init-server-env.sh and then deploy the Java WAR file from the accessible GitHub URL
 
 <https://github.com/dchqinc/dchq-docker-java-example/raw/master/dbconnect.war>
 
-<https://github.com/dchqinc/dchq-docker-java-example/blob/master/docker/init-server-env.sh>
+<https://github.com/dchqinc/dchq-docker-java-example/blob/master/websphere-config/init-server-env.sh>
 
 The Java WAR file will be deployed on this directory:
 
@@ -1603,13 +1607,23 @@ Once an application is saved, a user can register a Cloud Provider to automate t
 
 First, a user can register a Cloud Provider for Rackspace (for example) by navigating to **Manage** > **Cloud Providers & Repos** and then clicking on the **+** button to select **Rackspace**. The Rackspace API Key needs to be provided – which can be retrieved from the Account Settings section of the Rackspace Cloud Control Panel.
 
-A user can then create a cluster with an auto-scale policy to automatically spin up new Cloud Servers. This can be done by navigating to **Manage** > **Clusters** page and then clicking on the **+** button. You can select a capacity-based placement policy and then **Weave** as the networking layer in order to facilitate secure, password-protected cross-container communication across multiple hosts within a cluster. The **Auto-Scale Policy** in this example sets the maximum number of VM’s (or Cloud Servers) to 10.
+<figure>
+<img src="screenshots/0-Rackspace%20Cloud%20Provider.png"  />
+</figure>
+
+A user can then create a cluster with an auto-scale policy to automatically spin up new Cloud Servers. This can be done by navigating to **Manage** > **Clusters** page and then clicking on the **+** button. You can select a capacity-based placement policy and then **Weave** as the networking layer in order to facilitate secure, password-protected cross-container communication across multiple hosts within a cluster. The **Auto-Scale Policy** for example, may set the maximum number of VM’s (or Cloud Servers) to 10.
+
+<figure>
+<img src="screenshots/0-Rackspace%20Cluster.png"  />
+</figure>
 
 A user can now provision a number of Cloud Servers on the newly created cluster either through the UI-based workflow or by defining a simple YAML-based Machine Compose template that can be requested from the Self-Service Library.
 
 **UI-based Workflow** – A user can request Rackspace Cloud Servers by navigating to **Manage** > **Hosts** and then clicking on the **+** button to select **Rackspace**. Once the Cloud Provider is selected, a user can select the region, size and image needed. Ports are opened by default on Rackspace Cloud Servers to accommodate some of the port requirements (e.g. 32000-59000 for Docker, 6783 for Weave, and 5672 for RabbitMQ). A Cluster is then selected and the number of Cloud Servers can be specified.
 
- 
+<figure>
+<img src="screenshots/0-Rackspace%20Cloud%20Server%20UI-based%20Request.png"  />
+</figure>
 
 **YAML-based Machine Compose Template** – A user can first create a Machine Compose template for Rackspace by navigating to **Manage** > **Templates** and then selecting **Machine Compose**.
 
@@ -1623,6 +1637,10 @@ Medium:
   image: IAD/5ed162cc-b4eb-4371-b24a-a0ae73376c73
   count: 1
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+<figure>
+<img src="screenshots/0-Rackspace%20Cloud%20Server%20Machine%20Compose%20Template.png"  />
+</figure>
 
 The supported parameters for the Machine Compose template are summarized below:
 
@@ -1659,7 +1677,9 @@ Once the Cloud Servers are provisioned, a user can deploy a multi-tier, Docker-b
 
 A user can select an Environment Tag (like DEV or QE) and the Rackspace Cluster created before clicking on Run.
 
- 
+<figure>
+<img src="screenshots/0-Application%20Request.png"  />
+</figure>
 
 Accessing The In-Browser Terminal For The Running Containers
 ------------------------------------------------------------
@@ -1668,7 +1688,9 @@ A command prompt icon should be available next to the containers’ names on the
 
 For the Tomcat deployment for example, we used the command prompt to make sure that the Java WAR file was deployed under the /usr/local/tomcat/webapps/ directory.
 
- 
+<figure>
+<img src="screenshots/0-In-Browser%20Container%20Terminal.png"  />
+</figure>
 
 Monitoring the CPU, Memory & I/O Utilization of the Running Containers
 ----------------------------------------------------------------------
@@ -1677,7 +1699,13 @@ Once the application is up and running, our developers monitor the CPU, Memory, 
 
 A user can perform historical monitoring analysis and correlate issues to container updates or build deployments. This can be done by clicking on the **Actions** menu of the running application and then on **Monitoring**. A custom date range can be selected to view CPU, Memory and I/O historically.
 
- 
+<figure>
+<img src="screenshots/0-App%20Day-2%20Operations.png"  />
+</figure>
+
+<figure>
+<img src="screenshots/0-Containers%20Monitoring.png"  />
+</figure>
 
 Enabling the Continuous Delivery Workflow with Jenkins to Update the WAR File of the Running Application when a Build is Triggered
 ----------------------------------------------------------------------------------------------------------------------------------
@@ -1688,7 +1716,9 @@ However, many developers may wish to *update the running application server cont
 
 Developers, as a result will always have the latest Java WAR file deployed on their running containers in DEV/TEST environments.
 
- 
+<figure>
+<img src="screenshots/0-Continuous%20Delivery.png"  />
+</figure>
 
 Scaling out the Tomcat Application Server Cluster
 -------------------------------------------------
@@ -1697,9 +1727,17 @@ If the running application becomes resource constrained, a user can to scale out
 
 To scale out the cluster of Tomcat servers from 2 to 4, a user can click on the **Actions** menu of the running application and then select **Scale Out**. A user can then specify the new size for the cluster and then click on **Run Now**.
 
-We then used the BASH plug-in to update Nginx’s default.conf file so that it’s aware of the new application server added. The BASH script plug-ins can also be scheduled to accommodate use cases like cleaning up logs or updating configurations at defined frequencies. An application time-line is available to track every change made to the application for auditing and diagnostics.
+<figure>
+<img src="screenshots/0-Scale%20Out.png"  />
+</figure>
+
+We then used the BASH plug-in to update Nginx’s default.conf file so that it’s aware of the new application server added. The BASH script plug-ins can also be scheduled to accommodate use cases like cleaning up logs or updating configurations at defined frequencies. 
 
 To execute a plug-in on a running container, a user can click on the **Actions** menu of the running application and then select **Plug-ins**. A user can then select the load balancer (Nginx) container, search for the plug-in that needs to be executed, enable container restart using the toggle button. The default argument for this plug-in will dynamically resolve all the container IP’s of the running Tomcat servers and add them as part of the default.conf file.
+
+<figure>
+<img src="screenshots/0-Plug-in%20Update%20Apache%20HTTP%20Server.png"  />
+</figure>
 
 An application time-line is available to track every change made to the application for auditing and diagnostics. This can be accessed from the expandable menu at the bottom of the page of a running application.
 
